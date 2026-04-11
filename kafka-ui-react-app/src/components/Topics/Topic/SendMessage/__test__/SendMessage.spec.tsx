@@ -12,6 +12,15 @@ import { serdesPayload } from 'lib/fixtures/topicMessages';
 
 import Mock = jest.Mock;
 
+jest.mock('lib/featureFlags', () => ({
+  isVisualSchemaEditorEnabled: jest.fn(),
+}));
+
+jest.mock('components/common/SchemaVisualViewer', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+
 jest.mock('json-schema-faker', () => ({
   generate: () => ({
     f1: -93251214,

@@ -12,6 +12,8 @@ import { InputLabel } from 'components/common/Input/InputLabel.styled';
 import { useSerdes } from 'lib/hooks/api/topicMessages';
 import { SerdeUsage } from 'generated-sources';
 
+import SchemaVisualViewer from 'components/common/SchemaVisualViewer';
+
 import * as S from './SendMessage.styled';
 import {
   getDefaultValues,
@@ -52,6 +54,7 @@ const SendMessage: React.FC<{ closeSidebar: () => void }> = ({
     formState: { isSubmitting },
     control,
     setValue,
+    watch,
   } = useForm<FormType>({
     mode: 'onChange',
     defaultValues: {
@@ -60,6 +63,12 @@ const SendMessage: React.FC<{ closeSidebar: () => void }> = ({
       keepContents: false,
     },
   });
+  const watchedValueSerde = watch('valueSerde');
+  const valueSerdeSchema = React.useMemo(() => {
+    const serdeValues: Array<{ name: string; schema?: string }> =
+      serdes.value || [];
+    return serdeValues.find((v) => v.name === watchedValueSerde)?.schema;
+  }, [serdes.value, watchedValueSerde]);
 
   const submit = async ({
     keySerde,
@@ -216,6 +225,7 @@ const SendMessage: React.FC<{ closeSidebar: () => void }> = ({
             />
           </div>
           <div>
+            <SchemaVisualViewer schemaString={valueSerdeSchema} />
             <InputLabel>Value</InputLabel>
             <Controller
               control={control}
