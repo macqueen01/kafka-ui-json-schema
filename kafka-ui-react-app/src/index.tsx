@@ -7,6 +7,7 @@ import App from 'components/App';
 import { store } from 'redux/store';
 import 'lib/constants';
 import 'theme/index.scss';
+import 'jsonjoy-builder/styles.css';
 
 const container =
   document.getElementById('root') || document.createElement('div');
