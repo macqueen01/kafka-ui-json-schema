@@ -1,0 +1,1 @@
+Created a comprehensive stub for generated-sources in kafka-ui-react-app to allow frontend compilation without Java. Included all requested types and enums from the OpenAPI YAML. Used BaseApi and Configuration class stubs to satisfy the API client initialization logic.

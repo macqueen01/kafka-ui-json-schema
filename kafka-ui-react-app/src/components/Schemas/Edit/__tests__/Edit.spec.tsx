@@ -33,11 +33,6 @@ jest.mock('components/common/SchemaToggleEditor', () => ({
   ),
 }));
 
-jest.mock('components/common/EditorViewer/EditorViewer', () => ({
-  __esModule: true,
-  default: ({ data }: { data: string }) => <pre>{data}</pre>,
-}));
-
 const clusterName = 'testClusterName';
 
 const renderComponent = (
