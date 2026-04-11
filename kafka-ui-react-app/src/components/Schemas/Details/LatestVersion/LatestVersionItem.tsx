@@ -1,7 +1,9 @@
 import React from 'react';
-import { SchemaSubject } from 'generated-sources';
+import { SchemaSubject, SchemaType } from 'generated-sources';
 import EditorViewer from 'components/common/EditorViewer/EditorViewer';
 import Heading from 'components/common/heading/Heading.styled';
+import SchemaToggleEditor from 'components/common/SchemaToggleEditor';
+import { isVisualSchemaEditorEnabled } from 'lib/featureFlags';
 
 import * as S from './LatestVersionItem.styled';
 
@@ -15,7 +17,16 @@ const LatestVersionItem: React.FC<LatestVersionProps> = ({
   <S.Wrapper>
     <div>
       <Heading level={3}>Actual version</Heading>
-      <EditorViewer data={schema} schemaType={schemaType} maxLines={28} />
+      {isVisualSchemaEditorEnabled() && schemaType === SchemaType.JSON ? (
+        <SchemaToggleEditor
+          name="schema"
+          value={schema}
+          schemaType={schemaType}
+          readOnly
+        />
+      ) : (
+        <EditorViewer data={schema} schemaType={schemaType} maxLines={28} />
+      )}
     </div>
     <div>
       <div>

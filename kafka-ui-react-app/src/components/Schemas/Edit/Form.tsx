@@ -12,7 +12,7 @@ import {
 } from 'lib/paths';
 import yup from 'lib/yupExtended';
 import { NewSchemaSubjectRaw } from 'redux/interfaces';
-import Editor from 'components/common/Editor/Editor';
+import SchemaToggleEditor from 'components/common/SchemaToggleEditor';
 import Select from 'components/common/Select/Select';
 import { Button } from 'components/common/Button/Button';
 import { InputLabel } from 'components/common/Input/InputLabel.styled';
@@ -174,14 +174,12 @@ const Form: React.FC = () => {
             <div>
               <S.EditorContainer>
                 <h4>Latest schema</h4>
-                <Editor
+                <SchemaToggleEditor
+                  name="latestSchema"
+                  value={formatedSchema || ''}
                   schemaType={schema?.schemaType}
-                  isFixedHeight
                   readOnly
                   height="372px"
-                  value={formatedSchema}
-                  name="latestSchema"
-                  highlightActiveLine={false}
                 />
               </S.EditorContainer>
             </div>
@@ -192,12 +190,12 @@ const Form: React.FC = () => {
                   control={control}
                   name="newSchema"
                   render={({ field: { name, onChange, value } }) => (
-                    <Editor
+                    <SchemaToggleEditor
+                      name={name}
+                      value={value || ''}
+                      onChange={onChange}
                       schemaType={schema?.schemaType}
                       readOnly={isSubmitting}
-                      defaultValue={value}
-                      name={name}
-                      onChange={onChange}
                     />
                   )}
                 />

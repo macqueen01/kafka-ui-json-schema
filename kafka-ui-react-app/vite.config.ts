@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
         }
         if (req.url === '/api/clusters') {
           res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify([]));
+          res.end(JSON.stringify([{ name: 'local', status: 'online', readOnly: false }]));
           return;
         }
         if (req.url?.startsWith('/api/')) {

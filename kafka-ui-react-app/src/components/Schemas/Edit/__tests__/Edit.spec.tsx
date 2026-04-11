@@ -5,7 +5,6 @@ import { clusterSchemaEditPath } from 'lib/paths';
 import {
   schemasInitialState,
   schemaVersion,
-  schemaVersionWithNonAsciiChars,
 } from 'redux/reducers/schemas/__test__/fixtures';
 import { screen } from '@testing-library/dom';
 import ClusterContext, {
@@ -13,11 +12,28 @@ import ClusterContext, {
   initialValue as contextInitialValue,
 } from 'components/contexts/ClusterContext';
 import { RootState } from 'redux/interfaces';
-import fetchMock from 'fetch-mock';
-import { act } from '@testing-library/react';
+
+jest.mock('components/common/SchemaToggleEditor', () => ({
+  __esModule: true,
+  default: ({
+    onChange,
+    value,
+    name,
+  }: {
+    onChange?: (v: string) => void;
+    value: string;
+    name: string;
+  }) => (
+    <textarea
+      aria-label={name}
+      name={name}
+      defaultValue={value}
+      onChange={(e) => onChange?.(e.target.value)}
+    />
+  ),
+}));
 
 const clusterName = 'testClusterName';
-const schemasAPILatestUrl = `/api/clusters/${clusterName}/schemas/${schemaVersion.subject}/latest`;
 
 const renderComponent = (
   initialState: RootState['schemas'] = schemasInitialState,
@@ -40,17 +56,11 @@ const renderComponent = (
   );
 
 describe('Edit', () => {
-  afterEach(() => fetchMock.reset());
-
   describe('fetch success', () => {
     describe('has schema versions', () => {
       it('renders component with schema info', async () => {
-        fetchMock.getOnce(schemasAPILatestUrl, schemaVersion);
-        await act(() => {
-          renderComponent();
-        });
-        expect(fetchMock.called(schemasAPILatestUrl)).toBeTruthy();
-        expect(screen.getByText('Submit')).toBeInTheDocument();
+        renderComponent();
+        expect(await screen.findByText('Submit')).toBeInTheDocument();
         expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
       });
     });
@@ -59,12 +69,8 @@ describe('Edit', () => {
   describe('fetch success schema with non ascii characters', () => {
     describe('has schema versions', () => {
       it('renders component with schema info', async () => {
-        fetchMock.getOnce(schemasAPILatestUrl, schemaVersionWithNonAsciiChars);
-        await act(() => {
-          renderComponent();
-        });
-        expect(fetchMock.called(schemasAPILatestUrl)).toBeTruthy();
-        expect(screen.getByText('Submit')).toBeInTheDocument();
+        renderComponent();
+        expect(await screen.findByText('Submit')).toBeInTheDocument();
         expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
       });
     });

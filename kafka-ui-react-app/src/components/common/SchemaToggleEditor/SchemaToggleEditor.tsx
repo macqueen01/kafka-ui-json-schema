@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 interface SchemaToggleEditorProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   readOnly?: boolean;
   schemaType?: SchemaType;
   height?: string;
@@ -57,7 +57,7 @@ const LazyVisualEditor = React.lazy(() =>
 
 const SchemaToggleEditor: React.FC<SchemaToggleEditorProps> = ({
   value,
-  onChange,
+  onChange = () => undefined,
   readOnly = false,
   schemaType,
   height = '372px',
