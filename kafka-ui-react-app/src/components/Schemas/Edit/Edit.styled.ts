@@ -30,6 +30,7 @@ export const EditorsWrapper = styled.div`
 
   & > * {
     flex-grow: 1;
+    min-width: 0;
   }
 `;
 

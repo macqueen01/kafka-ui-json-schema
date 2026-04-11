@@ -55,12 +55,12 @@ const SchemaToggleEditor: React.FC<SchemaToggleEditorProps> = ({
   };
 
   return (
-    <div style={{ height, overflow: 'hidden', position: 'relative' }}>
+    <div style={{ overflow: 'hidden', position: 'relative', width: '100%' }}>
       <React.Suspense
         fallback={
           <div
             style={{
-              height: '100%',
+              height: '600px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
