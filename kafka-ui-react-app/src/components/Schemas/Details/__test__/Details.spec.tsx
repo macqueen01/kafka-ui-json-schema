@@ -22,6 +22,17 @@ const clusterName = 'testClusterName';
 const schemasAPILatestUrl = `/api/clusters/${clusterName}/schemas/${schemaVersion.subject}/latest`;
 const schemasAPIVersionsUrl = `/api/clusters/${clusterName}/schemas/${schemaVersion.subject}/versions`;
 
+jest.mock('lib/featureFlags', () => ({
+  isVisualSchemaEditorEnabled: jest.fn(),
+}));
+
+jest.mock('components/common/SchemaToggleEditor', () => ({
+  __esModule: true,
+  default: ({ value, name }: { value: string; name: string }) => (
+    <div data-testid="schema-toggle-editor" aria-label={name}>{value}</div>
+  ),
+}));
+
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
