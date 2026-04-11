@@ -55,28 +55,30 @@ const SchemaToggleEditor: React.FC<SchemaToggleEditorProps> = ({
   };
 
   return (
-    <React.Suspense
-      fallback={
-        <div
-          style={{
-            height,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-            color: '#888',
-          }}
-        >
-          Loading visual editor...
-        </div>
-      }
-    >
-      <LazyJsonSchemaEditor
-        schema={parsedSchema}
-        setSchema={handleSchemaChange}
-        readOnly={readOnly}
-      />
-    </React.Suspense>
+    <div style={{ height, overflow: 'hidden', position: 'relative' }}>
+      <React.Suspense
+        fallback={
+          <div
+            style={{
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              color: '#888',
+            }}
+          >
+            Loading visual editor...
+          </div>
+        }
+      >
+        <LazyJsonSchemaEditor
+          schema={parsedSchema}
+          setSchema={handleSchemaChange}
+          readOnly={readOnly}
+        />
+      </React.Suspense>
+    </div>
   );
 };
 
