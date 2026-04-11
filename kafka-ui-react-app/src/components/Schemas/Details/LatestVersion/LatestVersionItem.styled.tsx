@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
   & > * {
     background-color: ${({ theme }) => theme.default.backgroundColor};
     padding: 24px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   & > div:first-child {

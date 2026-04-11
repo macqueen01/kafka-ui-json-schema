@@ -15,6 +15,7 @@ import { NewSchemaSubjectRaw } from 'redux/interfaces';
 import SchemaToggleEditor from 'components/common/SchemaToggleEditor';
 import Select from 'components/common/Select/Select';
 import { Button } from 'components/common/Button/Button';
+import EditorViewer from 'components/common/EditorViewer/EditorViewer';
 import { InputLabel } from 'components/common/Input/InputLabel.styled';
 import PageHeading from 'components/common/PageHeading/PageHeading';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/redux';
@@ -174,12 +175,10 @@ const Form: React.FC = () => {
             <div>
               <S.EditorContainer>
                 <h4>Latest schema</h4>
-                <SchemaToggleEditor
-                  name="latestSchema"
-                  value={formatedSchema || ''}
+                <EditorViewer
+                  data={formatedSchema || ''}
                   schemaType={schema?.schemaType}
-                  readOnly
-                  height="372px"
+                  maxLines={20}
                 />
               </S.EditorContainer>
             </div>

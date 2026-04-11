@@ -26,8 +26,12 @@ export const EditWrapper = styled.div`
 
 export const EditorsWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 16px;
+
+  & > * {
+    flex-grow: 1;
+    min-width: 0;
+  }
 `;
 
 export const EditorContainer = styled.div(
