@@ -11,6 +11,38 @@ import { ViteEjsPlugin } from 'vite-plugin-ejs';
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
+  const mockBackendPlugin = {
+    name: 'mock-backend',
+    configureServer(server: any) {
+      server.middlewares.use((req: any, res: any, next: any) => {
+        if (req.url === '/actuator/info') {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ build: { version: 'dev' } }));
+          return;
+        }
+        if (req.url === '/api/info') {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({
+            build: { version: 'dev', buildTime: Date.now(), commitId: 'dev', isLatestRelease: true },
+            latestRelease: { versionTag: 'dev' },
+          }));
+          return;
+        }
+        if (req.url === '/api/clusters') {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify([]));
+          return;
+        }
+        if (req.url?.startsWith('/api/')) {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({}));
+          return;
+        }
+        next();
+      });
+    },
+  };
+
   const defaultConfig: UserConfigExport = {
     plugins: [
       react(),
@@ -19,9 +51,13 @@ export default defineConfig(({ mode }) => {
       ViteEjsPlugin({
         PUBLIC_PATH: mode !== 'development' ? 'PUBLIC-PATH-VARIABLE' : '',
       }),
+      mockBackendPlugin,
     ],
     server: {
       port: 3000,
+    },
+    optimizeDeps: {
+      include: ['react-dom', 'ajv', 'ajv-formats', '@monaco-editor/react'],
     },
     build: {
       outDir: 'build',
@@ -29,6 +65,7 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks: {
             ace: ['ace-builds', 'react-ace'],
+            jsonjoy: ['jsonjoy-builder', '@monaco-editor/react', 'monaco-editor'],
           },
         },
       },
