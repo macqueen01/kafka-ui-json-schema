@@ -11,7 +11,6 @@ import { useSendMessage, useTopicDetails } from 'lib/hooks/api/topics';
 import { InputLabel } from 'components/common/Input/InputLabel.styled';
 import { useSerdes } from 'lib/hooks/api/topicMessages';
 import { SerdeUsage } from 'generated-sources';
-
 import SchemaVisualViewer from 'components/common/SchemaVisualViewer';
 
 import * as S from './SendMessage.styled';
