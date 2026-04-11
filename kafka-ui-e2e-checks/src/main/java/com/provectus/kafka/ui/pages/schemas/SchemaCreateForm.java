@@ -28,6 +28,9 @@ public class SchemaCreateForm extends BasePage {
   protected SelenideElement compatibilityLevelList = $x("//ul[@name='compatibilityLevel']");
   protected SelenideElement newSchemaTextArea = $x("//div[@id='newSchema']");
   protected SelenideElement latestSchemaTextArea = $x("//div[@id='latestSchema']");
+  protected SelenideElement visualEditorTab = $x("//button[contains(text(),'Visual')]");
+  protected SelenideElement codeEditorTab = $x("//button[contains(text(),'Code')]");
+  protected SelenideElement jsonjoyContainer = $x("//*[contains(@class,'jsonjoy')]");
   protected SelenideElement leftVersionDdl = $(id("left-select"));
   protected SelenideElement rightVersionDdl = $(id("right-select"));
   protected List<SelenideElement> visibleMarkers =
@@ -137,5 +140,22 @@ public class SchemaCreateForm extends BasePage {
     } catch (Throwable ignored) {
     }
     return enabled;
+  }
+
+  @Step
+  public SchemaCreateForm clickVisualEditorTab() {
+    visualEditorTab.shouldBe(Condition.visible).click();
+    return this;
+  }
+
+  @Step
+  public SchemaCreateForm clickCodeEditorTab() {
+    codeEditorTab.shouldBe(Condition.visible).click();
+    return this;
+  }
+
+  @Step
+  public boolean isVisualEditorVisible() {
+    return jsonjoyContainer.is(Condition.visible);
   }
 }

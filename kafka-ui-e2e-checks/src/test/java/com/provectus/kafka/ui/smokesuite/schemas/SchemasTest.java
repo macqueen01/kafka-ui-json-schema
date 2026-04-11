@@ -183,6 +183,27 @@ public class SchemasTest extends BaseTest {
     SCHEMA_LIST.remove(PROTOBUF_API);
   }
 
+  @QaseId(300)
+  @Test(priority = 9)
+  public void createSchemaJsonWithVisualEditor() {
+    Schema schemaJson = Schema.createSchemaJson();
+    navigateToSchemaRegistry();
+    schemaRegistryList
+        .clickCreateSchema();
+    schemaCreateForm
+        .setSubjectName(schemaJson.getName())
+        .selectSchemaTypeFromDropdown(com.provectus.kafka.ui.api.model.SchemaType.JSON);
+    schemaCreateForm.clickVisualEditorTab();
+    Assert.assertTrue(schemaCreateForm.isVisualEditorVisible(), "Visual editor should be visible for JSON schema type");
+    schemaCreateForm
+        .clickCodeEditorTab()
+        .setSchemaField(fileToString(schemaJson.getValuePath()))
+        .clickSubmitButton();
+    schemaDetails.waitUntilScreenReady();
+    Assert.assertTrue(schemaDetails.isSchemaHeaderVisible(schemaJson.getName()), "Schema header should be visible after creation");
+    SCHEMA_LIST.add(schemaJson);
+  }
+
   @AfterClass(alwaysRun = true)
   public void afterClass() {
     SCHEMA_LIST.forEach(schema -> apiService.deleteSchema(schema.getName()));
