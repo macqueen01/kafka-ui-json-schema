@@ -1,1 +1,3 @@
-export { default } from './SchemaToggleEditor';
+import SchemaToggleEditor from './SchemaToggleEditor';
+
+export default SchemaToggleEditor;

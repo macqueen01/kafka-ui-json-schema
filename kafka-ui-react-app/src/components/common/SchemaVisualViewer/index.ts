@@ -1,1 +1,3 @@
-export { default } from './SchemaVisualViewer';
+import SchemaVisualViewer from './SchemaVisualViewer';
+
+export default SchemaVisualViewer;

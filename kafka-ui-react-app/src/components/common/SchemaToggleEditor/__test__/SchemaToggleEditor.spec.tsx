@@ -9,33 +9,31 @@ jest.mock('lib/featureFlags', () => ({
   isVisualSchemaEditorEnabled: jest.fn(),
 }));
 
-jest.mock('jsonjoy-builder', () => {
-  const React = require('react');
-  const SchemaVisualEditor = ({
+jest.mock('jsonjoy-builder', () => ({
+  __esModule: true,
+  SchemaVisualEditor: ({
     schema,
     onChange,
   }: {
     schema: Record<string, unknown>;
     onChange?: (s: Record<string, unknown>) => void;
-    readOnly: boolean;
-  }) =>
-    React.createElement(
-      'div',
-      { 'data-testid': 'schema-visual-editor' },
-      React.createElement('textarea', {
-        'data-testid': 'schema-visual-editor-input',
-        defaultValue: JSON.stringify(schema, null, 2),
-        onChange: (e: { target: { value: string } }) => {
+    readOnly?: boolean;
+  }) => (
+    <div data-testid="schema-visual-editor">
+      <textarea
+        data-testid="schema-visual-editor-input"
+        defaultValue={JSON.stringify(schema, null, 2)}
+        onChange={(e) => {
           try {
             onChange?.(JSON.parse(e.target.value));
-          } catch (_e) {
-            _e;
+          } catch {
+            // noop
           }
-        },
-      })
-    );
-  return { __esModule: true, SchemaVisualEditor };
-});
+        }}
+      />
+    </div>
+  ),
+}));
 
 const validJsonSchema =
   '{"type":"object","properties":{"name":{"type":"string"}}}';
@@ -93,7 +91,9 @@ describe('SchemaToggleEditor', () => {
         schemaType={SchemaType.JSON}
       />
     );
-    expect(screen.queryByTestId('schema-visual-editor')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('schema-visual-editor')
+    ).not.toBeInTheDocument();
   });
 
   it('switches to Visual tab on valid JSON', async () => {
