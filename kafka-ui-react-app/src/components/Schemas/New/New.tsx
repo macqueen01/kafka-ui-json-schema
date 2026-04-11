@@ -15,7 +15,7 @@ import Input from 'components/common/Input/Input';
 import { FormError } from 'components/common/Input/Input.styled';
 import Select, { SelectOption } from 'components/common/Select/Select';
 import { Button } from 'components/common/Button/Button';
-import { Textarea } from 'components/common/Textbox/Textarea.styled';
+import SchemaToggleEditor from 'components/common/SchemaToggleEditor';
 import PageHeading from 'components/common/PageHeading/PageHeading';
 import { schemaAdded } from 'redux/reducers/schemas/schemasSlice';
 import { useAppDispatch } from 'lib/hooks/redux';
@@ -67,11 +67,13 @@ const New: React.FC = () => {
     resolver: yupResolver(validationSchema),
   });
   const {
-    register,
     handleSubmit,
     control,
+    watch,
     formState: { isDirty, isSubmitting, errors, isValid },
   } = methods;
+
+  const watchedSchemaType = watch('schemaType');
 
   const onSubmit = async ({
     subject,
@@ -115,12 +117,18 @@ const New: React.FC = () => {
 
         <div>
           <InputLabel>Schema *</InputLabel>
-          <Textarea
-            {...register('schema', {
-              required: 'Schema is required.',
-            })}
-            disabled={isSubmitting}
-            aria-label="Schema"
+          <Controller
+            control={control}
+            name="schema"
+            render={({ field: { name, onChange, value } }) => (
+              <SchemaToggleEditor
+                name={name}
+                value={value || ''}
+                onChange={onChange}
+                schemaType={watchedSchemaType}
+                height="372px"
+              />
+            )}
           />
           <FormError>
             <ErrorMessage errors={errors} name="schema" />

@@ -5,6 +5,26 @@ import { clusterSchemaNewPath } from 'lib/paths';
 import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+jest.mock('components/common/SchemaToggleEditor', () => ({
+  __esModule: true,
+  default: ({
+    name,
+    onChange,
+    value,
+  }: {
+    name: string;
+    onChange: (v: string) => void;
+    value: string;
+  }) => (
+    <textarea
+      name={name}
+      aria-label="Schema"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  ),
+}));
+
 const clusterName = 'local';
 const subjectValue = 'subject';
 const schemaValue = 'schema';
