@@ -36,7 +36,7 @@ describe('New Component', () => {
 
   it('submit button will be enabled when form fields are filled', async () => {
     const subject = screen.getByPlaceholderText('Schema Name');
-    const schema = screen.getAllByRole('textbox')[1];
+    const schema = screen.getByRole('textbox', { name: /schema/i });
     const schemaTypeSelect = screen.getByRole('listbox');
 
     await userEvent.type(subject, subjectValue);

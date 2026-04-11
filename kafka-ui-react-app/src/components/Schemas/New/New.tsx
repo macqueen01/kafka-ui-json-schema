@@ -120,6 +120,7 @@ const New: React.FC = () => {
               required: 'Schema is required.',
             })}
             disabled={isSubmitting}
+            aria-label="Schema"
           />
           <FormError>
             <ErrorMessage errors={errors} name="schema" />

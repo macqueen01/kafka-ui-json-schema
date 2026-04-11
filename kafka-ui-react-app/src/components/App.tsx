@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense, lazy, useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import {
   accessErrorPage,
@@ -26,6 +26,7 @@ import { GlobalSettingsProvider } from './contexts/GlobalSettingsContext';
 import ErrorPage from './ErrorPage/ErrorPage';
 import { UserInfoRolesAccessProvider } from './contexts/UserInfoRolesAccessContext';
 import PageContainer from './PageContainer/PageContainer';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {

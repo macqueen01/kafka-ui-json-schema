@@ -19,6 +19,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "src",
+    "paths": {
+      "jsonjoy-builder": ["../node_modules/jsonjoy-builder/dist/index"]
+    },
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client"]
   },
