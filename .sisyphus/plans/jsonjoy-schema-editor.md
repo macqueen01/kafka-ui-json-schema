@@ -640,11 +640,11 @@ Each wave produces atomic commits. If any wave fails:
 
 ### Task 4.4: Final Jest suite run
 - [x] `cd kafka-ui-react-app && pnpm test -- --watchAll=false`
-- [ ] All tests green. Same or higher pass count vs Wave 0 baseline.
+- [x] All tests green. Same or higher pass count vs Wave 0 baseline.
 
 ### Task 4.5: Final lint check
 - [x] `cd kafka-ui-react-app && pnpm lint:CI`
-- [ ] Zero errors. Warnings same or fewer than baseline.
+- [x] Zero errors. Warnings same or fewer than baseline.
 
 ### [HUMAN CHECKPOINT 4]
 - [ ] **Present to human:**
