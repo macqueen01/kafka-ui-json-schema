@@ -57,7 +57,7 @@ build:jar:
         - kafka-ui-react-app/node_modules/
   script:
     - ./mvnw -B -ntp versions:set -DnewVersion=$CI_COMMIT_SHORT_SHA
-    - ./mvnw -B -V -ntp clean package -Pprod -DskipTests
+    - ./mvnw -B -V -ntp clean package -Pprod -DskipTests -Ddocker.skip=true
   artifacts:
     paths:
       - kafka-ui-api/target/kafka-ui-api-*.jar
