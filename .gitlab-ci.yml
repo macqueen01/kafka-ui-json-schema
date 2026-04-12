@@ -26,6 +26,10 @@ variables:
   IMAGE_LATEST: $CI_REGISTRY_IMAGE:latest
   # Maven cache directory (must be inside $CI_PROJECT_DIR for GitLab cache)
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  # Override MAVEN_CONFIG set by the maven Docker image (/root/.m2).
+  # The mvnw script passes $MAVEN_CONFIG as raw CLI args to Maven;
+  # leaving it set causes Maven to see "/root/.m2" as a lifecycle phase.
+  MAVEN_CONFIG: ""
 
 stages:
   - test
