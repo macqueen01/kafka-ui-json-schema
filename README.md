@@ -44,6 +44,7 @@ the cloud.
 * **Browse Messages** — browse messages with JSON, plain text, and Avro encoding
 * **Dynamic Topic Configuration** — create and configure new topics with dynamic configuration
 * **Configurable Authentification** — [secure](https://docs.kafka-ui.provectus.io/configuration/authentication) your installation with optional Github/Gitlab/Google OAuth 2.0
+* **Visual JSON Schema Editor** — build and inspect JSON Schemas with a split-panel visual field builder and live Monaco source editor; Avro® and Protobuf keep their existing editors
 * **Custom serialization/deserialization plugins** - [use](https://docs.kafka-ui.provectus.io/configuration/serialization-serde) a ready-to-go serde for your data like AWS Glue or Smile, or code your own!
 * **Role based access control** - [manage permissions](https://docs.kafka-ui.provectus.io/configuration/rbac-role-based-access-control) to access the UI with granular precision
 * **Data masking** - [obfuscate](https://docs.kafka-ui.provectus.io/configuration/data-masking) sensitive data in topic messages
@@ -78,6 +79,24 @@ Before producing avro/protobuf encoded messages, you have to add a schema for th
 with a few clicks in a user-friendly interface.
 
 ![Avro Schema Topic](documentation/images/Schema_Topic.gif)
+
+### Visual JSON Schema Editor
+
+JSON Schema type subjects now feature a full split-panel editor powered by [jsonjoy-builder](https://github.com/lovasoa/jsonjoy-builder): a visual field-tree on the left and a live Monaco JSON source view on the right. Both panels stay in sync in real time.
+
+**Schema details** — view any JSON Schema visually without editing:
+
+![JSON Schema details view](documentation/images/schema-visual-editor-details.png)
+
+**Create new schema** — build your schema field-by-field or paste raw JSON directly into the source panel:
+
+![Create JSON Schema with visual editor](documentation/images/schema-visual-editor-create.png)
+
+**Edit schema** — the current version renders read-only above, your new version below, with a Submit button always reachable:
+
+![Edit JSON Schema](documentation/images/schema-visual-editor-edit.png)
+
+> **Note:** The visual editor is gated behind a feature flag. Set `VITE_ENABLE_VISUAL_SCHEMA_EDITOR=true` in your environment to enable it. Avro® and Protobuf schemas are unaffected and continue to use the existing code editors.
 
 # Getting Started
 
