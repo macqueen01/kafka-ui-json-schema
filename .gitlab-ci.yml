@@ -1,0 +1,84 @@
+include:
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - project: "point3/ci-templates"
+    file: "/templates/build.gitlab-ci.yml"
+    ref: "4b545ee514eeb7dd2cf07d4b8763b4843e754abd"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# GitLab CI/CD Variables (Settings → CI/CD → Variables)
+# ──────────────────────────────────────────────────────────────────────────────
+# All variables below are already configured (predefined or group-level):
+#
+# Variable             | Description                                  | Source
+# ---------------------|----------------------------------------------|--------
+# CI_REGISTRY          | GitLab registry URL (registry.point3.io)     | Predefined
+# CI_REGISTRY_USER     | GitLab registry user                         | Predefined
+# CI_REGISTRY_PASSWORD | GitLab registry token                        | Predefined
+# DOCKERHUB_USER       | DockerHub login (rate limit avoidance)        | Group: point3
+# DOCKERHUB_TOKEN      | DockerHub token                              | Group: point3
+# GITLAB_NPM_TOKEN     | npm private registry token                   | Group: point3
+# POINT3_NPM_GROUP_ID  | npm group ID                                 | Group: point3
+# ──────────────────────────────────────────────────────────────────────────────
+
+variables:
+  IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  IMAGE_LATEST: $CI_REGISTRY_IMAGE:latest
+  # Maven cache directory (must be inside $CI_PROJECT_DIR for GitLab cache)
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+stages:
+  - test
+  - build
+
+# ── Stage: build ──────────────────────────────────────────────────────────────
+# Two jobs: Maven JAR build → Docker image build+push.
+# Runs only on master branch push.
+
+build:jar:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  cache:
+    - key:
+        files:
+          - pom.xml
+          - kafka-ui-api/pom.xml
+          - kafka-ui-contract/pom.xml
+          - kafka-ui-serde-api/pom.xml
+      paths:
+        - .m2/repository/
+    - key:
+        files:
+          - kafka-ui-react-app/pnpm-lock.yaml
+      paths:
+        - kafka-ui-react-app/node/
+        - kafka-ui-react-app/node_modules/
+  script:
+    - ./mvnw -B -ntp versions:set -DnewVersion=$CI_COMMIT_SHORT_SHA
+    - ./mvnw -B -V -ntp clean package -Pprod -DskipTests
+  artifacts:
+    paths:
+      - kafka-ui-api/target/kafka-ui-api-*.jar
+    expire_in: 1 hour
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+build:docker:
+  stage: build
+  extends: .build
+  needs:
+    - job: build:jar
+      artifacts: true
+  variables:
+    JAR_FILE: kafka-ui-api-${CI_COMMIT_SHORT_SHA}.jar
+  script:
+    - >-
+      docker build
+      --build-arg JAR_FILE=$JAR_FILE
+      -t "$IMAGE"
+      -t "$IMAGE_LATEST"
+      kafka-ui-api/
+    - docker push "$IMAGE"
+    - docker push "$IMAGE_LATEST"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
