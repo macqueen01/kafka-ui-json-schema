@@ -43,8 +43,6 @@ build:jar:
         files:
           - pom.xml
           - kafka-ui-api/pom.xml
-          - kafka-ui-contract/pom.xml
-          - kafka-ui-serde-api/pom.xml
       paths:
         - .m2/repository/
     - key:
