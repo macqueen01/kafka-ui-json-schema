@@ -62,6 +62,10 @@ build:jar:
       ./mvnw -B -V -ntp clean package -Pprod -DskipTests -Ddocker.skip=true
       -Dcheckstyle.skip=true -Djacoco.skip=true -Dgit.skip=true
       --projects '!kafka-ui-e2e-checks'
+    # Restore pom.xml files so the cache key (based on file hash) stays
+    # consistent between runs. versions:set modifies pom.xml, which changes
+    # the hash GitLab uses to save the cache → every run gets a cold miss.
+    - git restore pom.xml '*/pom.xml'
   artifacts:
     paths:
       - kafka-ui-api/target/kafka-ui-api-*.jar
