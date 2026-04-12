@@ -60,7 +60,8 @@ build:jar:
     - ./mvnw -B -ntp versions:set -DnewVersion=$CI_COMMIT_SHORT_SHA
     - >-
       ./mvnw -B -V -ntp clean package -Pprod -DskipTests -Ddocker.skip=true
-      -Dcheckstyle.skip=true -Djacoco.skip=true --projects '!kafka-ui-e2e-checks'
+      -Dcheckstyle.skip=true -Djacoco.skip=true -Dgit.skip=true
+      --projects '!kafka-ui-e2e-checks'
   artifacts:
     paths:
       - kafka-ui-api/target/kafka-ui-api-*.jar
