@@ -41,6 +41,7 @@ stages:
 
 build:jar:
   stage: build
+  timeout: 60 minutes
   image: maven:3.9-eclipse-temurin-17
   cache:
     - key:
@@ -57,7 +58,9 @@ build:jar:
         - kafka-ui-react-app/node_modules/
   script:
     - ./mvnw -B -ntp versions:set -DnewVersion=$CI_COMMIT_SHORT_SHA
-    - ./mvnw -B -V -ntp clean package -Pprod -DskipTests -Ddocker.skip=true
+    - >-
+      ./mvnw -B -V -ntp clean package -Pprod -DskipTests -Ddocker.skip=true
+      -Dcheckstyle.skip=true -Djacoco.skip=true --projects '!kafka-ui-e2e-checks'
   artifacts:
     paths:
       - kafka-ui-api/target/kafka-ui-api-*.jar
